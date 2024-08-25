@@ -2,7 +2,7 @@ import React, {useState} from "react";
 
 export interface Adapter<T> {
 
-    renderId(item: T): string;
+    renderId(item: T): string | number;
 
     renderText(item: T): string;
 
@@ -11,6 +11,7 @@ export interface Adapter<T> {
 }
 
 interface Props<T> {
+    name?: string;
 
     items: T[];
 
@@ -24,7 +25,7 @@ interface Props<T> {
 
 interface ViewOption<T> {
 
-    id: string;
+    id: string | number;
 
     text: string;
 
@@ -33,12 +34,15 @@ interface ViewOption<T> {
 }
 
 const AutoComplete = <T, >(props: Props<T>) => {
+    const name = props.name;
     const adapter = props.adapter;
     const items = props.items;
     const initialValue = props.initialValue;
     const onChange = props.onChange;
 
     const [text, setText] = useState<string>(() => initialValue != null ? adapter.renderText(initialValue) : "");
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
+    const [showPlaceholder, setShowPlaceholder] = useState<boolean>(false);
     const handleOnClick = (option: ViewOption<T>) => {
         handleChange(option.text);
         onChange?.(option.value);
@@ -62,22 +66,40 @@ const AutoComplete = <T, >(props: Props<T>) => {
                 className="autocomplete-input"
                 list="options"
                 value={text}
+                onFocus={() => {
+                    if (!showPlaceholder) {
+                        setShowPlaceholder(true);
+                    }
+                }}
                 onChange={(e) => {
+                    setShowDropdown(true);
                     handleChange(e.currentTarget.value);
                 }}
+                placeholder={showPlaceholder ? "Type here to search..." : ""}
             />
-            {text.length > 0 && viewOptions.length > 1 && (
+            {text.length > 0 && showDropdown && (
                 <ul className="autocomplete-options-container">
+                    {viewOptions.length == 0 && (
+                        <div>Noting found</div>
+                    )}
+
                     {viewOptions.map(it => (
                         <li
                             className="autocomplete-options-container-option"
                             key={it.id}
-                            onClick={() => handleOnClick(it)}
+                            onClick={() => {
+                                setShowDropdown(false);
+                                handleOnClick(it);
+                            }}
                         >
                             {it.text}
                         </li>
                     ))}
                 </ul>
+            )}
+
+            {name != null && (
+                <input type="hidden" name={name} value={text}/>
             )}
         </div>
     );

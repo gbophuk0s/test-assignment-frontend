@@ -5,6 +5,11 @@
     height: 90vh;
 }
 
+.examples-container {
+    display: flex;
+    gap: 10px;
+}
+
 .autocomplete-container {
     position: relative;
 }
@@ -27,6 +32,7 @@
     margin: 0;
     padding: 0;
     border: 1px solid black;
+    background: #ffffff;
 }
 
 .autocomplete-options-container-option {
