@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.autocomplete-container {
+    position: relative;
+}
+
+.autocomplete-input {
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 300px;
+}
+
+.autocomplete-options-container {
+    position: absolute;
+    top: 100%;
+    width: 300px;
+    cursor: pointer;
+    border-radius: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+}
+
+.autocomplete-options-container-option {
+    padding: 5px 5px;
+}
+
+.autocomplete-options-container-option:hover {
+    background: #d5e6eb;
+}
